@@ -1,0 +1,32 @@
+{
+    "private": true,
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build"
+    },
+    "devDependencies": {
+        "@inertiajs/vue3": "^1.0.0",
+        "@popperjs/core": "^2.11.6",
+        "@vitejs/plugin-vue": "^4.0.0",
+        "autoprefixer": "^10.4.12",
+        "axios": "^1.1.2",
+        "bootstrap": "^5.2.3",
+        "laravel-vite-plugin": "^0.7.2",
+        "mdb-vue-ui-kit": "^4.0.0",
+        "sass": "^1.56.1",
+        "vee-validate": "^4.9.1",
+        "vite": "^4.0.0",
+        "vue": "^3.2.37",
+        "vue-router": "^4.1.6",
+        "vuetify": "^3.2.2"
+    },
+    "dependencies": {
+        "bootstrap": "^5.2.3",
+        "crypto-js": "^4.1.1",
+        "http": "^0.0.1-security",
+        "jquery": "^3.6.4",
+        "node-ray": "^1.19.4",
+        "url": "^0.11.0",
+        "vue-axios": "^3.5.2"
+    }
+}

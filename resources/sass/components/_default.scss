@@ -1,0 +1,21 @@
+@use 'vuetify' with (
+  $color-pack: false,
+);
+
+#app {
+    height: 94vh;
+}
+
+html {
+    &::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #888;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #eee;
+    }
+}
