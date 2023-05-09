@@ -12,7 +12,7 @@ $ composer install
 # Execute as migrações
 $ php artisan migrate:fresh --seed
 
-# rodar passport
+# instalar passport
 $ php artisan passport:install
 
 # gerar chave
