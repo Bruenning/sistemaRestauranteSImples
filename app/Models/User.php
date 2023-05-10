@@ -3,20 +3,26 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Auth\MustVerifyEmail;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Database\Eloquent\Model;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
-{
-    use HasFactory, HasApiTokens, Notifiable;
+class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
+{ 
+    use Authenticatable, Authorizable, CanResetPassword, MustVerifyEmail, HasFactory, HasApiTokens, Notifiable;
 
     // The attributes that are mass assignable.
     protected $fillable = [
         'email',
         'password',
-        'first_name',
-        'last_name',
+        'name',
         'is_admin',
 
     ];
@@ -39,32 +45,24 @@ class User extends Authenticatable
         'full_name',
     ];
 
-    // Get the user's full name.
-
-    public function getFullNameAttribute(): string
-    {
-        return "{$this->first_name} {$this->last_name}";
-    }
-
     // Get the user's reservations.
 
     public function reservations()
     {
         return $this->hasMany(Reservation::class);
     }
+    
 
     /**
-     * functions
+     * scope
      */
 
-     // get a remember token
-
-    public function getAuthPassword()
+    public function scopeAdmin($query)
     {
-        return $this->password;
+        return $query->where('is_admin', true);
     }
 
-    // set a remember token
+    
 
 
 }

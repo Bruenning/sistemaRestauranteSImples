@@ -14,10 +14,6 @@ class ReservationsSeeder extends Seeder
      */
     public function run(): void
     {
-        Reservations::factory()->create([
-            'start' => '2021-06-01 00:00:00',
-            'end' => '2021-06-01 00:30:00',
-            'user_id' => 1,       
-        ]);
+        Reservations::factory()->count(10)->create();
     }
 }

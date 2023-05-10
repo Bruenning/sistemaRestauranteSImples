@@ -5,6 +5,7 @@
 
 <script>
 export default {
+    emits: ['update:rules'],
     props: {
         icon: {
             type: String,

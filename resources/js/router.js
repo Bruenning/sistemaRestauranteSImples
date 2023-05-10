@@ -3,8 +3,21 @@ import { createRouter, createWebHistory } from 'vue-router';
 const routes = [
     {
         path: '/',
-        name: 'home',
+        name: 'Home',
+        meta: {
+            isLogged: [false],
+            usedName: 'Home'
+        },
         component: () => import('./Pages/Home.vue'),
+    },
+    {
+        path: '/a/',
+        name: 'Dashboard',
+        meta: {
+            isLogged: [true],
+            usedName: 'Home'
+        },
+        component: () => import('./Pages/DashboardVue.vue'),
     },
     {
         path: '/:pathMatch(.*)*',

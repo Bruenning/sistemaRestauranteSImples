@@ -63,16 +63,13 @@ class UserController extends Controller
      */
     public function login(Request $request)
     {
-        $credentials = $request->only(['email', 'password']);
+        $user = User::where('email', $request->email)->where('password', $request->password)->first();
 
-        rd($credentials);
-        if (Auth::attempt($credentials)) {
-            $user = $request->user();
-            $token = $user->createToken('Personal Access Token')->accessToken;
+        if ($user) {
 
-            return response()->json(['token' => $token], 200);
+            return response()->json(['user_id' => $user->id, 'token' => base64_encode(hash('sha256', $user->remember_token))], 200);
+        } else {
+            return response()->json(['error' => 'Usuário não encontrado digite nvamente, ou crie uma conta'], 401);
         }
-
-        return response()->json(['error' => 'Unauthorized'], 401);
     }
 }

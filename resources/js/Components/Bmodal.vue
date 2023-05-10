@@ -1,10 +1,10 @@
 <template>
-    <div class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" tabindex="-1" aria-hidden="true" :id="id">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div v-if="!noHeader" class="modal-header">
             <span class="modal-title" v-html="title"></span>
-            <button type="button" class="close" data-bs-dismiss="modal" @click="close()">
+            <button type="button" class="close" @click="close()">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -13,8 +13,8 @@
           </div>
           <div v-if="!noFooter" class="modal-footer">
             <slot name="footer">
-                <Vbutton type="button" class="btn btn-primary" @click="onConfirm">Save changes</Vbutton>
-                <Vbutton type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</Vbutton>
+                <Vbutton v-if="noSave" type="button" class="btn btn-primary" @click="this.$emit('confirm');">Save changes</Vbutton>
+                <Vbutton v-if="noClose" type="button" class="btn btn-secondary" @click="close()">Close</Vbutton>
             </slot>
           </div>
         </div>
@@ -24,6 +24,7 @@
 
 <script>
     export default {
+        emits: ['close', 'confirm'],
         props: {
             confirmText: {
                 type: String,
@@ -44,14 +45,47 @@
             noFooter: {
                 type: Boolean,
                 default: false
+            },
+            noSave: {
+                type: Boolean,
+                default: false
+            },
+            noClose: {
+                type: Boolean,
+                default: false
+            },
+            id: {
+                type: String,
+                default: 'modal'
+            },
+            show: {
+                type: Boolean,
+                default: false
             }
         },
+        data() {
+            return {
+                modal: null
+            }
+        },
+        mounted() {
+            this.modal = new this.$bootstrap.Modal(document.getElementById(this.id), {
+                keyboard: false,
+                backdrop: 'static'
+
+            })
+        },
+        watch: {
+            'show'(val) {
+                if (val) 
+                    this.modal.show()
+            }
+        },
+        
         methods: {
-            onConfirm() {
-                this.$emit('confirm');
-            },
             close() {
-                this.$emit('close');
+                this.modal.hide()
+                this.$emit('close')
             }
         }
     }

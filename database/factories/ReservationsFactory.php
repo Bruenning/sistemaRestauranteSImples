@@ -21,10 +21,15 @@ class ReservationsFactory extends Factory
 
     public function definition(): array
     {
+        //possíveis horarios da reserva 18:00 as 23:59 intervalo de 30 minutos para gerar aleatorio na seed
+        $possibleTimes = ['18:00:00', '18:30:00', '19:00:00', '19:30:00', '20:00:00', '20:30:00', '21:00:00', '21:30:00','22:00:00', '22:30:00', '23:00:00', '23:30:00'];
+
+        $time = $possibleTimes[array_rand($possibleTimes)];
+
         return [
-            'start' => $this->faker->dateTimeInInterval('now', '+1 month'),
-            'end' => $this->faker->dateTimeInInterval('+1 month', '+30 min'),
-            'user_id' => 1,       
+            'dateReservation' => $this->faker->dateTimeBetween('now', '+1 years'),
+            'timeReservation' => $time,
+            'user_id' => $this->faker->numberBetween(1, 10),       
         ];
     }
 }

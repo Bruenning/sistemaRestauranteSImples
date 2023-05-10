@@ -16,8 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('first_name', 50);
-            $table->string('last_name', 50);
+            $table->string('name', 50);
             $table->boolean('is_admin')->default(false);
             $table->rememberToken();
         });

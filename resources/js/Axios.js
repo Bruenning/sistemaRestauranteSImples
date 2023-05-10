@@ -47,6 +47,7 @@ async function get (url, params) {
 
 async function post (url, params) {
 
+    console.log(url,params);
     return await new Promise((resolve, reject) => {
         instance.post(url, params)
         .then(response => {
