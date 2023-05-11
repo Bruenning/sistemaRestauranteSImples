@@ -3,7 +3,7 @@
 );
 
 #app {
-    height: 94vh;
+    height: 100vh;
 }
 
 html {
@@ -19,3 +19,22 @@ html {
         background: #eee;
     }
 }
+
+.v-application__wrap{
+
+    .v-footer{
+        position: fixed;
+        bottom: 0;
+        flex: 1 1 auto;
+        width: 100%;
+    }
+}
+
+.dashboard{
+    display: flex;
+    flex-direction: column;
+    height: 79vh;
+    overflow-x: hidden;
+    width: 100%;
+}
+

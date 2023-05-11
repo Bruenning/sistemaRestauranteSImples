@@ -1,10 +1,13 @@
 
 import { createApp } from 'vue'
 import VueAxios from 'vue-axios'
+import { Collection, collect } from 'collect.js'
 
 
 import './bootstrap';
 import * as bootstrap from 'bootstrap'
+import 'bootstrap-icons/font/bootstrap-icons.css'
+
 import 'vee-validate/dist/vee-validate.js'
 
 import 'bootstrap/dist/css/bootstrap.css'
@@ -32,9 +35,10 @@ import Bmodal from './Components/Bmodal.vue'
 import Vsnackbar from './Components/Vsnackbar.vue'
 import Vselect from './Components/Vselect.vue'  
 import Vdialog from './Components/Vdialog.vue'
-import Vtable from './Components/Vtable.vue'
+import Btable from './Components/Btable.vue'
+import Vcontainer from './Components/Vcontainer.vue'
 
-import dashboardVue from './Pages/DashboardVue.vue';
+import dashboardVue from './Pages/DashboardVue.vue'
 import AccountFormVue from './Pages/AccountForm.vue'
 import Login from './Pages/Login.vue'
 import Menu from './Pages/Menu.vue'
@@ -46,11 +50,15 @@ import NotFoundVue from './Pages/NotFound.vue'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+import '@mdi/font/css/materialdesignicons.css'
 
 
 const vuetify = createVuetify({
     components,
     directives,
+    icons: {
+        defaultSet: 'mdi',
+    },
 })
 
 const app = createApp(App)
@@ -66,11 +74,13 @@ app.component('Bmodal', Bmodal)
 app.component('Vsnackbar', Vsnackbar)
 app.component('Vdialog', Vdialog)
 app.component('VueDatePicker', VueDatePicker)
-app.component('Vtable', Vtable)
+app.component('Btable', Btable)
+app.component('Vcontainer', Vcontainer)
 
 app.component('Menu', Menu)
 app.component('Login', Login)
 app.component('AccountForm', AccountFormVue)
+app.component('dashboardVue', dashboardVue)
 app.component('Home', HomeVue)
 app.component('Reservation', ReservationVue)
 app.component('NotFound', NotFoundVue)
@@ -84,6 +94,10 @@ app
 app.config.globalProperties.$helpers = helpers
 app.config.globalProperties.$api = api
 app.config.globalProperties.$bootstrap = bootstrap
+app.config.globalProperties.$isAdmin = window.localStorage.getItem('is_admin')
+
+app.config.globalProperties.collect = collect
+app.config.globalProperties.Collection = Collection
 
 app.mount('#app')
 

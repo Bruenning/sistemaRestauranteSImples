@@ -1,5 +1,5 @@
 <template>
-    <v-btn :color="color" :variant="variant" class="btn" :class="classBtn"  :data-bs-toggle="modal ? 'modal' : ''" :data-bs-target=" modal ? `#${target}` : ''">
+    <v-btn :color="color" :variant="variant" class="btn" :class="classBtn" :icon="icon" >
         <slot></slot>
     </v-btn>
 </template>
@@ -23,9 +23,9 @@
                 type: Boolean,
                 default: false
             },
-            target: {
-                type: String,
-                default: '',
+            icon: {
+                type: Boolean,
+                default: false
             }
         }
     }

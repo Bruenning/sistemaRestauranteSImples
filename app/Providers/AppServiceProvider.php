@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Validator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Validator::extend('time_format', function ($attribute, $value, $parameters, $validator) {
+            $regex = '/^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/';
+            return preg_match($regex, $value);
+        });
     }
 }

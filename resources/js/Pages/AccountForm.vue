@@ -1,33 +1,40 @@
 <!-- modal de craição de conta de usuário usando o componentes de Vmodal -->
 <template>
-    <Vmodal v-model="showModal" title="Criar conta">
-        <Vform ref="form" v-model="form" :rules="rules">
+    <Bmodal @close="close()" id="accountForm" title="Registrar-se" icon="account-plus" :show="show">
+        <Vform >
             <Vrow>
-                <Vcol cols="12" md="6">
-                    <Vtext-field v-model="form.name" label="Nome" :rules="rules.name"></Vtext-field>
+                <Vcol>
+                    <Vinput v-model="form.name" label="Nome" :rules="rules.name"></Vinput>
                 </Vcol>
-                <Vcol cols="12" md="6">
-                    <Vtext-field v-model="form.email" label="E-mail" :rules="rules.email"></Vtext-field>
+                <Vcol>
+                    <Vinput v-model="form.email" label="E-mail" icon="email" :rules="rules.email"></Vinput>
                 </Vcol>
-                <Vcol cols="12" md="6">
-                    <Vtext-field v-model="form.password" label="Senha" :rules="rules.password" type="password"></Vtext-field>
+                <Vcol>
+                    <Vinput v-model="form.password" label="Senha" icon="form-textbox-password" :rules="rules.password" type="password"></Vinput>
                 </Vcol>
-                <Vcol cols="12" md="6">
-                    <Vtext-field v-model="form.password_confirmation" label="Confirmação de senha" :rules="passwordRules" type="password"></Vtext-field>
+                <Vcol>
+                    <Vinput v-model="form.password_confirmation" label="Confirmação de senha" icon="form-textbox-password" :rules="rules.password_confirmation" type="password"></Vinput>
                 </Vcol>
             </Vrow>
+            
         </Vform>
         <template v-slot:footer>
-            <Vbtn color="primary" @click="create">Criar</Vbtn>
-            <Vbtn color="primary" @click="showModal = false">Cancelar</Vbtn>
+            <Vbutton color="primary" @click="create">Criar</Vbutton>
         </template>
-    </Vmodal>
+    </Bmodal>
 
     <Vsnackbar v-model="snackbar" :message="snackbarMessage" :color="snackbarColor" :timeout="snackbarTimeout" />
+
 </template>
 
 <script>
 export default {
+    props: {
+        show: {
+            type: Boolean,
+            default: false,
+        },
+    },
     data() {
         return {
             form: {
@@ -36,6 +43,7 @@ export default {
                 password: null,
                 password_confirmation: null,
             },
+            
             snackbar: false,
             snackbarMessage: '',
             snackbarColor: '',
@@ -44,7 +52,7 @@ export default {
             rules: {
                 name: [
                     v => !!v || 'Nome é obrigatório',
-                    v => v.length <= 255 || 'Nome deve ter no máximo 255 caracteres',
+                    v => !!v && this.collect(v).count() <= 255 || 'Nome deve ter no máximo 255 caracteres',
                 ],
                 email: [
                     v => !!v || 'E-mail é obrigatório',
@@ -52,7 +60,14 @@ export default {
                 ],
                 password: [
                     v => !!v || 'Senha é obrigatória',
-                    v => v.length >= 8 || 'Senha deve ter no mínimo 8 caracteres',
+                    v => v != this.form.email || 'Senha não pode ser igual ao e-mail',
+                    v => v != this.form.name || 'Senha não pode ser igual ao nome',
+                    v => /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/.test(v) || 'Senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial',
+                    
+                ],
+                password_confirmation: [
+                    v => !!v || 'Confirmação de senha é obrigatória',
+                    v => v == this.form.password || 'Confirmação de senha deve ser igual a senha',
                 ],
             },
             showModal: false,
@@ -60,13 +75,16 @@ export default {
     },
     methods: {
         create() {
-            let valid = this.$helpers.validateForm(this.login, rules)
+            let valid = this.$helpers.validateForm(this.form, this.rules)
 
             if (!valid != true) {
                 this.snackbarMessage = valid
                 this.snackbarColor = 'error'
                 this.snackbar = true
             }
+        },
+        close() {
+            this.$emit('close')
         },
     },
 }

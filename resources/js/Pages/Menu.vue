@@ -10,7 +10,7 @@
                 </ul>
             </div>
 
-            <Vbutton v-if="btnLogin" class="navbar-brand" type="button" color="primary" target="login" @click="showModal = true" >
+            <Vbutton v-if="btnLogin" class="navbar-brand" type="button" color="primary" @click="showModal = true" >
                 Login
             </Vbutton>
             <Vbutton v-else class="navbar-brand" type="button" color="primary" @click="logout()" >
@@ -18,11 +18,14 @@
             </Vbutton>
         </div>
     </div>
-    <Login title="<b>Login</b>" :show="showModal" @close="onClose()"/>
+    <Login title="<b>Login</b>" :show="showModal" @close="onClose()" @snack="showSnackbar" @createAccount="createAccount"/>
+
+    <AccountForm :show="showAccount" @close="closeAccount" @snack="showSnackbar" />
 
     <Vsnackbar v-model="snackbar" :message="snackbarMessage" :color="snackbarColor" :timeout="snackbarTimeout" />
 
     <Vdialog title="Confirmação" message="<div class'text-align-center'>Deslogar</div>" @cancel="cancelDialog()" @confirm="logout(true)" v-model="dialog" />
+
 </template>
 
 <script>
@@ -31,12 +34,16 @@
             return {
                 show: false,
                 btnLogin: false,
+
                 showModal: false,
+                showAccount: false,
+
                 alert: false,
                 alertMessage: '',
                 alertColor: '',
                 alertTimeout: 3000,
                 dialog: false,
+
                 snackbar: false,
                 snackbarMessage: '',
                 snackbarColor: '',
@@ -103,6 +110,8 @@
                 if (confirm) {
                     localStorage.removeItem('token')
                     localStorage.removeItem('user_id')
+                    localStorage.removeItem('is_admin')
+                    
                     this.dialog = false
 
                     this.reload()
@@ -111,6 +120,20 @@
                 }
 
                 this.dialog = true
+            },
+
+            createAccount() {
+                this.showAccount = true
+            },
+
+            closeAccount() {
+                this.showAccount = false
+            },
+
+            showSnackbar(e) {
+                this.snackbar = true
+                this.snackbarMessage = e.message
+                this.snackbarColor = e.color
             }
         }
     }

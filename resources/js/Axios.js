@@ -32,7 +32,7 @@ async function get (url, params) {
             resolve(response);
         })
         .catch(error => {
-            reject(error);
+            reject(error.response.data.message || error);
         });
     });
 }
@@ -47,14 +47,13 @@ async function get (url, params) {
 
 async function post (url, params) {
 
-    console.log(url,params);
     return await new Promise((resolve, reject) => {
         instance.post(url, params)
         .then(response => {
             resolve(response);
         })
         .catch(error => {
-            reject(error);
+            reject(error.response.data.message || error);
         })
     });
 }
@@ -74,7 +73,7 @@ async function put (url, params) {
             resolve(response);
         })
         .catch(error => {
-            reject(error);
+            reject(error.response.data.message || error);
         });
     });
 }
@@ -94,7 +93,7 @@ async function del (url, params) {
             resolve(response);
         })
         .catch(error => {
-            reject(error);
+            reject(error.response.data.message || error);
         });
     });
 }

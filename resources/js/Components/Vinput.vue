@@ -1,6 +1,6 @@
 <!--component input using vuetify e validate-->
 <template>
-    <v-text-field :type="type" :append-icon="icon" :color="color" :label="Nome" :rules="rules"></v-text-field>
+    <v-text-field :type="type" :prepend-icon="`mdi-${icon}`" :color="color" :label="Nome" :rules="rules"></v-text-field>
 </template>
 
 <script>
@@ -9,7 +9,7 @@ export default {
     props: {
         icon: {
             type: String,
-            default: 'mdi-account'
+            default: 'account'
         },
         color: {
             type: String,

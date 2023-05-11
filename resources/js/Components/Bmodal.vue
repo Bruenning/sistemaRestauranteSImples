@@ -3,7 +3,10 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div v-if="!noHeader" class="modal-header">
-            <span class="modal-title" v-html="title"></span>
+            <div>
+                <v-icon :icon="`mdi-${icon}`" style="padding-right:15px;"></v-icon>
+                <span class="modal-title" v-html="title"></span>
+            </div>
             <button type="button" class="close" @click="close()">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -13,9 +16,10 @@
           </div>
           <div v-if="!noFooter" class="modal-footer">
             <slot name="footer">
-                <Vbutton v-if="noSave" type="button" class="btn btn-primary" @click="this.$emit('confirm');">Save changes</Vbutton>
-                <Vbutton v-if="noClose" type="button" class="btn btn-secondary" @click="close()">Close</Vbutton>
+                <Vbutton v-if="!noSave" type="button" color="primary" @click="this.$emit('confirm');">Save changes</Vbutton>
             </slot>
+
+            <Vbutton v-if="!noClose" type="button" color="danger" @click="close()">Close</Vbutton>
           </div>
         </div>
       </div>
@@ -61,6 +65,10 @@
             show: {
                 type: Boolean,
                 default: false
+            },
+            icon: {
+                type: String,
+                default: 'information'
             }
         },
         data() {
@@ -79,6 +87,8 @@
             'show'(val) {
                 if (val) 
                     this.modal.show()
+                else
+                    this.modal.hide()
             }
         },
         

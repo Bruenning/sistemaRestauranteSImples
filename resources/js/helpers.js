@@ -71,4 +71,16 @@ function validateForm(form, rules) {
     return valid ? true : error;
 }
 
-export default { hash, route, validateForm }   
+function getDate(date) {
+    date = new Date(date);
+
+    return date.toLocaleDateString('pt-BR');
+}
+
+function getTime(date) {
+    date = new Date(date);
+
+    return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+}
+
+export default { hash, route, validateForm, getDate, getTime }   

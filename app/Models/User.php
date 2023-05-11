@@ -31,19 +31,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $hidden = [
         'password',
         'remember_token',
+        'is_admin'
     ];
 
-    // The attributes that should be cast.
-
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
-    // The accessors to append to the model's array form.
-
-    protected $appends = [
-        'full_name',
-    ];
 
     // Get the user's reservations.
 
@@ -51,7 +41,13 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         return $this->hasMany(Reservation::class);
     }
+
+    // Get the user's is_admin.
     
+    public function isAdmin()
+    {
+        return $this->is_admin;
+    }
 
     /**
      * scope

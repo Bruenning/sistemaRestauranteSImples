@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Reservations;
 use Illuminate\Http\Request;
+use App\Http\Resources\ReservationsResource;
+
 
 class ReservationsController extends Controller
 {
@@ -22,7 +24,36 @@ class ReservationsController extends Controller
      */
     public function store(Request $request)
     {
-        $reservations = Reservations::create($request->validated());
+
+        $request['timeReservation'] = date('H:i:s', strtotime($request['timeReservation']));
+        $request['dateReservation'] = date('Y-m-d', strtotime($request['dateReservation']));
+
+        $reservationsExists = Reservations::where('dateReservation', $request['dateReservation'])->where('timeReservation', $request['timeReservation'])->get();
+        $userReservationsDay = Reservations::where('user_id', $request['user_id'])->where('dateReservation', $request['dateReservation'])->get();
+
+        if ($reservationsExists->count() >= 15) {
+            return response()->json(['message' => 'Não há mais vagas para este horário'], 400);
+        }
+
+        $dayOfWeek = date('w', strtotime($request['dateReservation']));
+
+        if ($dayOfWeek === '0') {
+            return response()->json(['message' => 'Não é possível reservar para este dia'], 400);
+        }
+
+        if ($userReservationsDay->count() > 0) {
+            return response()->json(['message' => 'Você já possui uma reserva para este dia'], 400);
+        }
+
+
+        $validatedData = $request->validate([
+            'dateReservation' => 'required|date',
+            'timeReservation' => 'required|time_format',
+            'user_id' => 'required|integer',
+        ]);
+
+
+        $reservations = Reservations::create($validatedData);
 
         return new ReservationsResource($reservations);
     }
@@ -54,4 +85,15 @@ class ReservationsController extends Controller
 
         return response()->noContent();
     }
+
+    /**
+     * return reservations by user id
+     */
+
+    public function userId($id)
+    {
+        $reservations = Reservations::where('user_id', $id)->orderBy('id', 'DESC')->get();
+        return new ReservationsResource($reservations);
+    }
+
 }

@@ -1,33 +1,31 @@
 <template>
-    <Bmodal @close="close()" id="login" :title="title" noFooter :show="showModal">
+    <Bmodal @close="close()" id="login" :title="title" :show="showModal" icon="login">
         <Vform>
             <Vrow>
                 <Vcol>
-                    <Vinput v-model="login.email" type="text" name="email" label="Email" :rules="emailRules"/>
+                    <Vinput v-model="login.email" type="text" name="email" icon="email" label="Email" :rules="emailRules"/>
                 </Vcol>
             </Vrow>
             <Vrow>
                 <Vcol>
-                    <Vinput v-model="login.password" type="password" name="password" label="Password" :rules="passwordRules"/>
-                </Vcol>
-            </Vrow>
-            <Vrow>
-                <Vcol>
-                    <Vbutton type="submit" color="primary" @click="onSubmit">Login</Vbutton>
-                    <a href="#" @click="createAccont()">Criar Conta</a>
+                    <Vinput v-model="login.password" type="password" name="password" icon="form-textbox-password" label="Password" :rules="passwordRules"/>
                 </Vcol>
             </Vrow> 
         </Vform>
+
+        <template v-slot:footer>
+            <Vbutton @click="onSubmit" color="primary">Entrar</Vbutton>
+            <Vbutton @click="createAccont" color="primary">Registrar-se</Vbutton>
+        </template>
     </Bmodal>
 
     <Vsnackbar v-model="snackbar" :message="snackbarMessage" :color="snackbarColor" :timeout="snackbarTimeout" />
 
-    <AccountForm v-if="showAccount" :show="showAccount" @close="closeAccount()" />
 </template>
 
 <script>
     export default {
-    emits: ["close"],
+    emits: ["close", "snack", "createAccount"],
     props: {
         title: {
             type: String,
@@ -44,12 +42,13 @@
                 email: null,
                 password: null
             },
+
             snackbar: false,
             snackbarMessage: "",
             snackbarColor: "",
             snackbarTimeout: 3000,
+            
             showModal: false,
-            showAccount: false,
         };
     },
     mounted() {
@@ -90,30 +89,27 @@
             };
 
             this.$api.post("user/login", login).then(res => {
-                this.snackbarMessage = "Login efetuado com sucesso!";
-                this.snackbarColor = "success";
-                this.snackbar = true;
 
                 localStorage.setItem("token", res.data.token);
-                localStorage.setItem("user_id", res.data.user_id);
+                localStorage.setItem("user_id", res.data.user_id)
 
+                if (res.data.is_admin === 1)
+                    localStorage.setItem("is_admin", res.data.is_admin)
+
+                this.$emit('snack', {message: "Login efetuado com sucesso!", color: 'success'})
                 this.reload(true);
 
             }).catch(err => {
-                this.snackbarMessage = err;
-                this.snackbarColor = "error";
-                this.snackbar = true;
+                this.$emit('snack', {message: err, color: 'error'})
             });
         },
 
         createAccont() {
-            this.preventDefault();
+            this.$emit("createAccount")
 
-            this.showAccount = true;
-        },
+            this.showModal = false;
+            this.close();
 
-        closeAccount() {
-            this.showAccount = false;
         },
         
         reload(reload = false) {
@@ -130,6 +126,8 @@
                 email: null,
                 password: null
             };
+
+            this.$emit("close");
         },
     },
 }

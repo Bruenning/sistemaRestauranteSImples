@@ -21,6 +21,13 @@ class UserSeeder extends Seeder
             'is_admin' => true,
         ]);
 
+        User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'teste2@teste2.com',
+            'password' => hash('sha256', 'admin', false),
+            'is_admin' => false,
+        ]);
+
         User::factory()->count(10)->create();
     }
 }
