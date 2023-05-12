@@ -8,7 +8,7 @@
                 </div>
             </Vcol>
             <Vcol>
-                <Btable :headers="headers" :items="items">
+                <Btable :headers="headers" :items="items" @delete="onDelete">
                 </Btable>
             </Vcol>
         </Vrow>
@@ -17,6 +17,9 @@
     <Reservation :show="showReservation" @close="close()" @snack="ShowSnackbar"></Reservation> 
 
     <Vsnackbar v-model="snackbar" :message="snackbarMessage" :color="snackbarColor" :timeout="snackbarTimeout" />
+
+    <Vdialog title="Confirmação" message="<div class'text-align-center'>Tem certeza que deseja excluir este item?</div>" @cancel="cancelDialog()" @confirm="deleteConfirm = true" v-model="dialog" />
+
 </template>
 
 <script>
@@ -38,10 +41,38 @@ export default {
             snackbarColor: "",
             snackbarTimeout: 3000,
 
+            deleteConfirm: false,
+            idDelete: null,
+
+            dialog: false,
+
         }
     },
     mounted() {
         this.reload()
+    },
+
+    watch: {
+        'deleteConfirm': function () {
+            if (this.idDelete != null && this.deleteConfirm) {
+                this.$api.del(`reservations/delete/${this.idDelete}`).then(response => {
+                    this.snackbar = true
+                    this.snackbarMessage ='Reserva excluída com sucesso!'
+                    this.snackbarColor = 'success'
+
+                    this.deleteConfirm = false
+                    this.idDelete = null
+                    this.dialog = false
+
+                    this.reload()
+                }).catch(error => {
+                    console.log(error, 'error')
+                    this.snackbar = true
+                    this.snackbarMessage = error.response?.data.message || error
+                    this.snackbarColor = 'error'
+                })
+            }
+        }
     },
     methods: {
         reload() {
@@ -76,16 +107,6 @@ export default {
         edit(id) {
             this.$router.push({ name: 'user.edit', params: { id: id } })
         },
-        remove(id) {
-            this.$dialog
-                .confirm('Tem certeza que deseja remover este usuário?')
-                .then(dialog => {
-                    this.$api.delete('/api/users/' + id).then(response => {
-                        this.reload()
-                        this.$dialog.alert('Usuário removido com sucesso!')
-                    })
-                })
-        },
 
         CreateReservation() {
             this.showReservation = true
@@ -101,6 +122,17 @@ export default {
             this.snackbarMessage = e.message
             this.snackbarColor = e.color
         },
+        cancelDialog() {
+            this.dialog = false
+        },
+
+        onDelete(id) {
+            
+            this.idDelete = id
+
+            this.dialog = true
+ 
+        }
     },
 }
 </script>

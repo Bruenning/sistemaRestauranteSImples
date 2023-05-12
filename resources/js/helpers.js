@@ -72,13 +72,16 @@ function validateForm(form, rules) {
 }
 
 function getDate(date) {
-    date = new Date(date);
+    
+    date = new Date(date.replace('Z', '').replace('T', ' '));
 
     return date.toLocaleDateString('pt-BR');
 }
 
 function getTime(date) {
+
     date = new Date(date);
+    date.setUTCHours(date.getUTCHours() + 3)
 
     return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 }

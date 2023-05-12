@@ -9,8 +9,11 @@ class Reservations extends Model
 {
     use HasFactory;
 
+    protected $table = 'reservations';
+
     // The attributes that are mass assignable.
     protected $fillable = [
+        'id',
         'dateReservation',
         'timeReservation',
         'user_id',

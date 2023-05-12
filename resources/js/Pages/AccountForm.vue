@@ -77,13 +77,41 @@ export default {
         create() {
             let valid = this.$helpers.validateForm(this.form, this.rules)
 
-            if (!valid != true) {
+            if (valid != true) {
                 this.snackbarMessage = valid
                 this.snackbarColor = 'error'
                 this.snackbar = true
+                return
             }
+
+            let form = {
+                ...this.form,
+                password: this.$helpers.hash(this.form.password),
+                password_confirmation: this.$helpers.hash(this.form.password_confirmation),
+            }
+
+            this.$api.post('user/store', form)
+                .then(response => {
+                    this.snackbarMessage = 'Conta criada com sucesso'
+                    this.snackbarColor = 'success'
+                    this.snackbar = true
+
+                    this.close()
+                })
+                .catch(error => {
+                    this.snackbarMessage = error
+                    this.snackbarColor = 'error'
+                    this.snackbar = true
+                })
         },
         close() {
+            this.form = {
+                name: null,
+                email: null,
+                password: null,
+                password_confirmation: null,
+            }
+
             this.$emit('close')
         },
     },

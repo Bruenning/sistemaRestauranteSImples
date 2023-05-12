@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use App\Http\Resources\UserResource;
+
 
 class UserController extends Controller
 {
@@ -23,7 +25,18 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user = User::create($request->validated());
+
+        $request['remember_token'] = Str::random(10);
+
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:user',
+            'password' => 'required|string|min:8|confirmed',
+            'remember_token' => 'required|string|max:255',
+        ]);
+        
+        $user = User::create($validatedData);
+        
 
         return new UserResource($user);
     }

@@ -56,7 +56,7 @@ export default {
             let date = new Date()
             let dates = []
 
-            date.setDate(date.getDate() + 1)
+            date.setDate(date.getDate())
 
             while (date.getDate() <= 30) {
                 if (date.getDay() != 1)
@@ -79,6 +79,7 @@ export default {
                 
                 if (date.toLocaleTimeString() >= dateNow)
                     items.push(element)
+
             });
             
             return items
@@ -99,6 +100,7 @@ export default {
         save() {
             let time = new Date()
             let date = new Date(this.form.date)
+            date.setHours(date.getHours() - 3)
             let hoursSting = this.timeBase.find(element => element.id == this.form.hours).name
             time.setHours(hoursSting.substr(0, 2), hoursSting.substr(3, 2), 0, 0);
             

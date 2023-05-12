@@ -16,7 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->date('dateReservation');
             $table->time('timeReservation');
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->constrained('user');
         });
     }
 

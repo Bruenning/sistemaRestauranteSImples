@@ -14,6 +14,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        //usuário admin
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'teste@teste.com',
@@ -21,8 +22,9 @@ class UserSeeder extends Seeder
             'is_admin' => true,
         ]);
 
+        //usuário para testar criação de reservas
         User::factory()->create([
-            'name' => 'Test User',
+            'name' => 'Test 2 User',
             'email' => 'teste2@teste2.com',
             'password' => hash('sha256', 'admin', false),
             'is_admin' => false,

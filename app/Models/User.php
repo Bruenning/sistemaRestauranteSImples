@@ -18,13 +18,15 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 { 
     use Authenticatable, Authorizable, CanResetPassword, MustVerifyEmail, HasFactory, HasApiTokens, Notifiable;
 
+    protected $table = 'user';
+
     // The attributes that are mass assignable.
     protected $fillable = [
         'email',
         'password',
         'name',
         'is_admin',
-
+        'remember_token'
     ];
 
     // The attributes that should be hidden for arrays.
@@ -49,6 +51,22 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->is_admin;
     }
 
+    // create a new user
+
+    public static function create(array $attributes = [])
+    {
+        $user = new User();
+        $user->email = $attributes['email'];
+        $user->password = $attributes['password'];
+        $user->name = $attributes['name'];
+        $user->remember_token = $attributes['remember_token'];
+        $user->is_admin = false;
+
+        $user->save();
+
+        return $user;
+    }
+
     /**
      * scope
      */
@@ -57,8 +75,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         return $query->where('is_admin', true);
     }
-
-    
 
 
 }
