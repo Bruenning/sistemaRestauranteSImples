@@ -8,7 +8,8 @@
 # criar .env
 $ cp .env.example .env
 
-# configurar .env localHost pois o projeto foi desenvolvido em ambiente local com o wamp Laragon que utilizar o nome da pasta do projeto como url
+# configurar .env localHost pois o projeto foi desenvolvido em ambiente
+local com o wamp Laragon que utilizar o nome da pasta do projeto como url
 $ nano .env
 
 # Instale as dependências
