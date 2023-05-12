@@ -1,5 +1,5 @@
 const instance = axios.create({
-    baseURL: 'localhost:3000/api/',
+    baseURL: 'http://127.0.0.1:5173/api/',
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
