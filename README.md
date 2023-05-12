@@ -12,6 +12,9 @@ $ cp .env.example .env
 # local com o wamp Laragon que utilizar o nome da pasta do projeto como url
 $ nano .env
 
+# configurar resources/js/axios.js com url
+$ nano resources/js/axios.js
+
 # Instale as dependências
 $ npm install
 $ composer install
