@@ -1,5 +1,5 @@
 const instance = axios.create({
-    baseURL: process.env.APP_URL + '/api/',
+    baseURL: 'localhost:3000/api/',
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
